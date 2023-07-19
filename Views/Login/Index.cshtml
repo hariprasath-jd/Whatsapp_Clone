@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+<div class="p-4 p-md-5 border rounded-3 bg-dark" style="--bs-bg-opacity: .5;">
+    @using (Html.BeginForm("Validate", "Login", FormMethod.Post))
+    {
+        <h4 class="pb-3">Login to Messenger</h4>
+        <div class="form-floating mb-3">
+            @Html.TextBox("Username", "", new { id = "UserName", placeholder = "name@example.com", Class = "form-control" })
+            <label for="UserName">Email address</label>
+            <p style="color:red;">@ViewData["UserWarning"].ToString()</p>
+        </div>
+        <div class="form-floating mb-3">
+            @Html.TextBox("Password", "", new { id = "PassWord", placeholder = "password", Class = "form-control", Type = "password" })
+            <label for="PassWord">Password</label>
+            <p style="color:red;">@ViewData["PasswdWarning"].ToString()</p>
+
+            <button class="w-100 btn btn-lg btn-info" type="submit">Sign In</button>
+        </div>
+        <div class=" mb-3">
+            <label>
+                New Here! <a href="#">Register</a>
+            </label>
+        </div>
+    }
+</div>

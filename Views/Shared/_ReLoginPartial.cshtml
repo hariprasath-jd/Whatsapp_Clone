@@ -1,0 +1,71 @@
+﻿
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: rgb(28, 33, 44);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            width: 300px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            background-color: #0e4195;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        .btn-login {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-login:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h3>Login</h3>
+        </div>
+        <div class="card-body shadow-lg">
+            <form action="/Validate" method="post" >
+                <div class="form-floating mb-3">
+                    <label for="UserName">Email address</label>
+                    @Html.TextBox("Username", "", new { id = "UserName", placeholder = "name@example.com", Class = "form-control" })
+
+                    <p style="color:red;">@ViewData["UserWarning"].ToString()</p>
+                </div>
+                <div class="form-floating mb-3">
+                    <label for="PassWord">Password</label>
+                    @Html.TextBox("Password", "", new { id = "PassWord", placeholder = "password", Class = "form-control", Type = "password" })
+
+                    <p style="color:red;">@ViewData["PasswdWarning"].ToString()</p>
+
+                    <button class="w-100 btn btn-lg btn-info" type="submit">logIn</button>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer text-muted text-center">
+            Session has ended. Please login again.
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+﻿@model List<Whatsapp_clone.Models.Message.Contact>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<style>
+    #chat2 .form-control {
+        border-color: transparent;
+    }
+
+        #chat2 .form-control:focus {
+            border-color: transparent;
+            box-shadow: inset 0px 0px 0px 1px transparent;
+        }
+
+    .divider:after,
+    .divider:before {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #eee;
+    }
+
+    @@media screen and (max-width: 600px) {
+    }
+</style>
+
+
+<script src="~/Script/home_js.js" type="text/javascript"></script>
+
+
+
+<div class="row" id="main_body" style="max-height:100vh;max-width:100vw;">
+    <div class=" pe-0 my-0 " style="width: 280px;">
+        <a class="d-flex align-items-center flex-shrink-0 p-3 pe-0 link-body-emphasis text-decoration-none bg-dark border-bottom border-right fixed" style="--bs-bg-opacity: .9; border-right: 1px solid #495057">
+            <span class="fs-5 fw-semibold ">Contact</span>
+        </a>
+
+        <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-dark" style="height: 83.2vh; overflow: hidden; overflow-y: auto; width: 268px;">
+            <div class="input-group rounded  p-1">
+                <input type="search" class="form-control text-decoration-none focus-ring focus-ring-info" placeholder="Search" aria-label="Search"
+                       aria-describedby="search-addon" />
+                <span class="input-group-text border-0" id="search-addon">
+                    <i class="fas fa-search"></i>
+                </span>
+            </div>
+            <div class="list-group list-group-flush scrollarea">
+                @foreach (Whatsapp_clone.Models.Message.Contact i in Model)
+                {
+                    <button class="btn" id="button_@i.Id" onclick="show(this)">
+                        <div class="d-flex w-100 align-items-center justify-content-between list-group-item list-group-item-action  py-3 lh-sm">
+                            <strong class="mb-1" id="contact_@i.Id">@i.Name</strong>
+                            <small>@i.day.Date.ToString("M")</small>
+                        </div>
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row d-flex col ms-0 px-0">
+
+        <div id="componentContainer" class="col px-0 ms-0 bg-dark border-left " style="--bs-bg-opacity: .9;margin-right:0px;">
+
+            <div id="newpartial">
+                @Html.Partial("_NewPartial")
+            </div>
+            <div class="col chat" id="container" style="padding: 0px;max-width:100vw;display: none;">
+
+                <div class="card" id="chat2">
+                    <div class="card-header d-flex justify-content-between align-items-center p-3">
+                        <h5 class="mb-0 pb-1" id="nameholder"></h5>
+                        <button class="btn btn-danger float-end" onclick="CloseChat()">Leave chat</button>
+                    </div>
+                    <div class="card-body" id="chat_body" data-mdb-perfect-scrollbar="true" style="position: relative;height:72.5vh;">
+                        <!--Recived-->
+                        <div class="d-flex flex-row justify-content-start">
+                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
+                                 alt="avatar 1" style="width: 45px; height: 100%;">
+                            <div id="recivied_message">
+                            </div>
+                        </div>
+                        <!--Sent-->
+                        <div class="d-flex flex-row justify-content-end mb-4 pt-1">
+                            <div id="sent_message">
+                            </div>
+                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp"
+                                 alt="avatar 1" style="width: 45px; height: 100%;">
+                        </div>
+                    </div>
+                    <form id="formsubmit" enctype="multipart/form-data">
+                        <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+
+                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp" alt="avatar 3" style="width: 40px; height: 100%;">
+                            <a class="ms-3 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
+                            <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
+                            <input type="text" class="form-control form-control-md mx-3" id="messagebox" placeholder="Type message">
+                            <button class="ms-1 btn" type="submit"><i class="fas fa-paper-plane w-100 h-100"></i></button>
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@Html.Partial("_AddNewContactPartial")
+
+
+
+<!--Bottom add new contact button-->
+<div class="dropdown position-fixed bottom-0 justify-content-center start-0 mb-3 ms-3 bd-mode-toggle bg-info rounded-5" id="staticBackdrop" style="--bs-bg-opacity:0.7;height:48px;width:48px;">
+    <button class="btn btn-bd-primary py-2 d-flex align-items-center rounded-5 h-100 mx-auto" id="bd-theme" style="height: 48px; width: 48px;" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (dark)">
+        <i class="fa-solid fa-plus fa-xl  theme-icon mx-auto" style="color: #000000;"></i>
+        <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-dark dropend shadow ms-4 mb-1" aria-labelledby="bd-theme-text">
+        <li>
+            <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false" data-bs-toggle="modal" data-bs-target="#NewContact">
+                <i class="fa-solid fa-user-plus me-2  theme-icon" width="1em" height="1em"></i>
+                Add New Chat
+            </button>
+        </li>
+        <li>
+            <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                <i class="fa-solid fa-users-line me-2 theme-icon" width="1em" height="1em"></i>
+                Add New Group
+            </button>
+        </li>
+        <li>
+            <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="false">
+                <i class="fa-solid fa-sliders  me-2 theme-icon"></i>
+                Setting
+                <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+            </button>
+        </li>
+    </ul>
+</div>
+
+
