@@ -23,11 +23,11 @@ namespace Whatsapp_clone.Controllers
 
             List<Messages> result = new List<Messages>();
             int sender = Convert.ToInt32(Session["Id"]);
-            int reciver = Convert.ToInt32(Request.QueryString["RId"]);
+            int receiver = Convert.ToInt32(Request.QueryString["RId"]);
 
 
-            var Recived_chat = (from message in appContext.Messages where message.SenderId == sender && message.RecipientId == reciver select message).ToList();
-            var Send_chat = (from message in appContext.Messages where message.SenderId == reciver && message.RecipientId == sender select message).ToList();
+            var Recived_chat = (from message in appContext.Messages where message.SenderId == sender && message.RecipientId == receiver select message).ToList();
+            var Send_chat = (from message in appContext.Messages where message.SenderId == receiver && message.RecipientId == sender select message).ToList();
 
             Messages rec_data = new Messages()
             {
@@ -54,7 +54,13 @@ namespace Whatsapp_clone.Controllers
         public ActionResult SendMessage()
         {
             bool res;
-            MessageDetails message = new MessageDetails() { Timestamp = DateTime.Now, RecipientId = Convert.ToInt32(Session["Id"]), SenderId = Convert.ToInt32(Request.Form["rec_id"]), Content = Request.Form["Content"] };
+            MessageDetails message = new MessageDetails()
+            {
+                Timestamp = DateTime.Now,
+                RecipientId = Convert.ToInt32(Session["Id"]),
+                SenderId = Convert.ToInt32(Request.Form["rec_id"]),
+                Content = Request.Form["Content"]
+            };
             Debug.WriteLine("from the method");
             appContext.Messages.Add(message);
             int x = appContext.SaveChanges();
@@ -69,12 +75,19 @@ namespace Whatsapp_clone.Controllers
             return Json(res, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        [Route("NewChat")]
+        public ActionResult NewChat()
+        {
+            return Json("",JsonRequestBehavior.AllowGet);
+        }
+
 
         [HttpPost]
         [Route("SearchContact")]
         public ActionResult SearchContact()
         {
-            List<string> result = new List<string>();
+            List<Contact> result = new List<Contact>();
             string data;
             MatchCollection matches;
 
@@ -83,28 +96,32 @@ namespace Whatsapp_clone.Controllers
             {
                 data = reader.ReadToEnd();
             }
-            var numbers = (from table in appContext.Details select table.Mobile).ToArray();
-            
-            if ((data != "") || (data != null))
+            var numbers = (from table in appContext.Details select new Contact { Content = table.Email, Name = table.Name }).ToArray();
+
+            if (data != "" && data != " ")
             {
-                foreach(string i in numbers)
+                foreach (Contact i in numbers)
                 {
-                    matches = Regex.Matches(i, data);
+                    matches = Regex.Matches(i.Content.Replace("@[a-zA-Z0-9][a-zA-Z0-9.-]+(.[a-z]{2,}|.[0-9]{1,}", " "), data);
                     foreach (Match match in matches)
                     {
-                        result.Add(i);
+                        if (result.Contains(i))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            result.Add(i);
+                        }
                     }
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                result = new List<string>();
-                result.Add("No contact found");
+                result.Add(new Contact { Name = "No Contact Found", Content = "..." });
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
-
-            
         }
     }
 }

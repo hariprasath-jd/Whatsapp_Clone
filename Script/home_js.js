@@ -13,11 +13,12 @@ $(document).ready(function () {
 
         //get the parameters and data
         var form = new FormData();
+
         var message = $('#messagebox').val();
-        console.log(message)
         var rec_id = sessionStorage.getItem('Rec_Id');
         var date = new Date();
         var time = date;
+
         form.append('day', time);
         form.append('Content', message);
         form.append('rec_id', rec_id);
@@ -25,11 +26,13 @@ $(document).ready(function () {
 
         //passing the data to the ajax method
         $.ajax({
+
             url: '/SendMessage',
             type: 'POST',
             data: form,
             contentType: false,
             processData: false,
+
             success: function (response) {
                 if (response != null) {
 
@@ -44,6 +47,7 @@ $(document).ready(function () {
                     alert('falied');
                 }
             },
+
             error: function (response) {
                 alert('error message' + JSON.stringify(response));
             }
@@ -52,25 +56,64 @@ $(document).ready(function () {
 });
 
 
+function makeNewChat(btn)
+{
+    //btn.
+}
+
+
 $(document).ready(function () {
 
     $("#searchbar").on('input', function () {
         let data = $("#searchbar").val();
-        $.ajax({
-            url: "/SearchContact",
-            type: 'POST',
-            data: data,
-            contentType: "text",
-            success: function (response) {
-                for (i = 0; i < response.length; i++) {
+        document.getElementById("contactarea").innerHTML = "";
+        $.ajax(
+            {
+                url: "/SearchContact",
+                type: 'POST',
+                data: data.trim().replace("@[a-zA-Z0-9][a-zA-Z0-9.-]+(.[a-z]{2,}|.[0-9]{1,}", " "),
+                contentType: "text",
+                success: function (response) {
+                    console.clear()
+                    for (j = 0; j < response.length; j++) {
+                        let link = document.createElement('button');
+                        link.classList = "list-group-item list-group-item-action py-3 lh-sm";
+                        link.addEventListener("click",
+                            function () {
+                                makeNewChat(this);
+                            }
+                        );
 
-                    console.log(response[i].toString());
+                        link.id = "link_" + j;
+
+                        let innerdiv = document.createElement('div');
+                        innerdiv.classList = "d-flex w-100 align-items-center justify-content-between";
+                        innerdiv.id = "innerdiv_" + j;
+
+                        let strong = document.createElement('strong');
+                        strong.classList = "mb-1";
+                        strong.innerHTML = response[j].Name.toString();
+
+                        let small = document.createElement('small');
+                        small.classList = "text-body-secondary";
+                        small.innerHTML = response[j].Content.toString();
+
+                        let chatbtn = document.createElement('button');
+                        chatbtn.className = "btn btn-success"
+
+                        document.getElementById('contactarea').appendChild(link);
+                        document.getElementById('link_' + j).appendChild(innerdiv);
+                        document.getElementById('innerdiv_' + j).appendChild(strong);
+                        document.getElementById('innerdiv_' + j).appendChild(small);
+                        //console.log(response[j].Name.toString() + ' ' + response[j].Content);
+
+                    }
+                },
+                error: function () {
+                    $("#result").val() = 'error message';
                 }
-            },
-            error: function () {
-                $("#result").val() = 'error message';
             }
-        });
+        );
     });
 
 

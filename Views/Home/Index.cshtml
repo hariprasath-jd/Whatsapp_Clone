@@ -48,8 +48,8 @@
             <div class="list-group list-group-flush scrollarea">
                 @foreach (Whatsapp_clone.Models.Message.Contact i in Model)
                 {
-                    <button class="btn" id="button_@i.Id" onclick="show(this)">
-                        <div class="d-flex w-100 align-items-center justify-content-between list-group-item list-group-item-action  py-3 lh-sm">
+                    <button class="list-group-item list-group-item-action  lh-sm border-0" id="button_@i.Id" onclick="show(this)">
+                        <div class="d-flex w-100 align-items-center justify-content-between list-group-item list-group-item-action rounded-3 py-3 lh-sm">
                             <strong class="mb-1" id="contact_@i.Id">@i.Name</strong>
                             <small>@i.day.Date.ToString("M")</small>
                         </div>
@@ -113,7 +113,7 @@
 
 
 <!--Bottom add new contact button-->
-<div class="dropdown position-fixed bottom-0 justify-content-center start-0 mb-3 ms-3 bd-mode-toggle bg-info rounded-5" id="staticBackdrop" style="--bs-bg-opacity:0.7;height:48px;width:48px;">
+<div class="dropdown position-fixed bottom-0 justify-content-center start-0 mb-3 ms-3 bd-mode-toggle bg-info rounded-5" tabindex="100" id="staticBackdrop" style="--bs-bg-opacity:0.7;height:48px;width:48px;">
     <button class="btn btn-bd-primary py-2 d-flex align-items-center rounded-5 h-100 mx-auto" id="bd-theme" style="height: 48px; width: 48px;" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (dark)">
         <i class="fa-solid fa-plus fa-xl  theme-icon mx-auto" style="color: #000000;"></i>
         <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
